@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package rdp;
+
+message Frame {
+    bytes data = 1;         // сжатый видеокадр
+    int32 width = 2;
+    int32 height = 3;
+    int64 timestamp = 4;    // время для синхронизации
+}
+
+message MouseEvent {
+    int32 x = 1;
+    int32 y = 2;
+    int32 button = 3;       // 0=move, 1=left, 2=right
+}
+
+message KeyEvent {
+    int32 keycode = 1;
+    bool pressed = 2;
+}
+
+message Packet {
+    enum Type {
+        FRAME = 0;
+        MOUSE = 1;
+        KEY = 2;
+    }
+    Type type = 1;
+    bytes encrypted_data = 2;  // libsodium шифрует всё содержимое
+}
